@@ -1,12 +1,10 @@
 ## 멋쟁이 사자처럼
 ---
-### 코어 자바스크릷트 학습 저장소
+### 코어 자바스크립트 학습 저장소
 
 ---
 
-학습 주제별로 브랜치를 나눠 수업을 진행합니다.
-학습 자료는 해당 브랜치로 이동 후 확인할수 있습니다.
+학습이 완료된 항목은 체크박스로 표시됩니다.
 
-
-1. JavaScript Core Branch [바로가기](https://github.com/lanuioe/core_javascript/tree/01.core)
-2. JavaScript Dom Branch [바로가기](https://github.com/lanuioe/core_javascript)
+### Basic
+- [X] Code Structure [바로가기](https://github.com/lanuioe/core_javascript)
