@@ -7,7 +7,7 @@
 // default export (기본 내보내기) -> 이름 (중괄호 X)
 // import clearContents from "./lib/dom/clear.js";
 
-import { getNode, clearContents, insertLast } from "./lib/index.js";
+import { getNode, clearContents, insertLast, getNodes } from "./lib/index.js";
 
 function phase1() {
   const first = getNode("#firstNumber");
@@ -48,3 +48,25 @@ function phase1() {
 }
 
 // 이벤트 위임 처리 방법
+
+const calculator = getNode(".calculator");
+const result = getNode(".result");
+const clear = getNode("#clear");
+const numberInputs = Array.from(getNodes("input:not(#clear)"));
+
+function handleInput() {
+  const total = numberInputs.reduce((acc, cur) => acc + Number(cur.value), 0);
+
+  clearContents(result);
+  insertLast(result, total);
+}
+
+function handleClear(e) {
+  e.preventDefault();
+
+  numberInputs.forEach(clearContents);
+  result.textContent = "-";
+}
+
+calculator.addEventListener("input", handleInput);
+clear.addEventListener("input", handleClear);
