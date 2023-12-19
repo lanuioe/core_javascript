@@ -1,50 +1,62 @@
-// 모듈 프로그래밍
+/* global gsap */
 
-// named export (이름 내보내기) -> { 이름 }
-// import { getNode } from "./lib/dom/getNode.js";
-// import { insertLast } from "./lib/dom/insert.js";
+import jujeobData from "./data/data.js";
 
-// default export (기본 내보내기) -> 이름 (중괄호 X)
-// import clearContents from "./lib/dom/clear.js";
+import {
+  getNode,
+  getRandom,
+  isNumericString,
+  shake,
+  showAlert,
+  insertLast,
+  clearContents,
+  copy,
+} from "./lib/index.js";
 
-import { getNode, clearContents, insertLast } from "./lib/index.js";
+// [phase-1]
+// 1. 주접 떨기 버튼을 클릭할 수 있는 핸들러를 연결해 주세요.
+// 2. nameField에 있는 값을 가져와 주세요.
+// 3. jujeob 데이터를 가져오기
+// 4. jujeoData에서 랜덤한 주접 한개를 가져오기.
 
-function phase1() {
-  const first = getNode("#firstNumber");
-  const second = getNode("#secondNumber");
-  const result = getNode(".result");
-  const clear = getNode(".clear");
+// [phase-2]
+// 1. 아무 값도 입력 받지 못했을 때 예외처리 (콘솔창 출력)
+// 2. 공백 문자를 받았을 때 예외처리 (콘솔창 출력)
 
-  // 1. input value 값 가져오기
-  //     - input에게 input 이벤트를 걸어 준다.
-  //     - input.value 로 가져온다.
+const submit = getNode("#submit");
+const nameField = getNode("#nameField");
+const result = getNode(".result");
 
-  // 2. 두 수의 합 더하기
-  //     - 타입 확인하기.
+function handleSubmit(e) {
+  e.preventDefault();
+  const name = nameField.value;
+  const list = jujeobData(name);
+  const pick = jujeobData(name)[getRandom(list.length)];
 
-  // 3. 합계 랜더링 하기
-  //     - insertLast(), insertAdjacentHTML()
+  if (!name || name.replace(/\s*/g, "") === "") {
+    showAlert(".alert-error", "이름을 입력해주세요!", 1500);
 
-  function handleInput() {
-    const firstValue = first.value * 1;
-    const secondValue = second.value / 1;
-    const total = firstValue + secondValue;
-
-    // result.textContent = "";
-    clearContents(result);
-    insertLast(result, total);
+    shake.restart();
+    return;
   }
 
-  function handleClear(e) {
-    e.preventDefault();
-    clearContents(first);
-    clearContents(second);
-    result.textContent = "-";
+  if (!isNumericString(name)) {
+    showAlert(".alert-error", "제대로된 이름을 입력해주세요.", 2000);
+
+    shake.restart();
+    return;
   }
 
-  first.addEventListener("input", handleInput);
-  second.addEventListener("input", handleInput);
-  clear.addEventListener("click", handleClear);
+  clearContents(result);
+  insertLast(result, pick);
 }
 
-// 이벤트 위임 처리 방법
+function handleCopy() {
+  const text = result.textContent;
+  copy(text).then(() => {
+    showAlert(".alert-success", "클립보드 복사 완료!");
+  });
+}
+
+submit.addEventListener("click", handleSubmit);
+result.addEventListener("click", handleCopy);
